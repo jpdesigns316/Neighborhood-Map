@@ -1,0 +1,81 @@
+
+.controlUI {
+		background-color: #fff;
+		border: 2px solid #fff;
+		border-radius: 3px;
+		box-shadow: 0 2px 6px rgba(0,0,0,.3);
+		cursor: pointer;
+		margin-bottom: 22px;
+		text-align:
+}
+
+.controlText {
+	color: rgb(25,25,25);
+  font-family: Roboto,Arial,sans-serif;
+  font-size: 16px;
+  line-height: 38px;
+  padding-left: 5px;
+  padding-right: 5px;
+
+}
+
+#map {
+		margin-right: 25px;
+    width:50%;
+    height:570px;
+		float: right;
+}
+
+.jumbo-header {
+    background: url("../images/header-min.jpg");
+    background-size: 100% auto;
+    min-height: 230px;
+    margin-left: 1px;
+    margin-right: 1px;
+}
+
+.title {
+    margin-top: 100px;
+    padding: 15px;
+    background-color: black;
+    background: rgb(0, 0, 0);
+    background: rgba(0, 0, 0, 0.4);
+}
+
+h1 {
+    color: white;
+    font-size: 80px!important;
+    opacity: 1.0;
+}
+
+.locations,
+.maps {
+    margin-top: 10px;
+}
+
+
+.ham {
+    font-size: 30px;
+}
+
+.footer {
+    font-weight: bold;
+    text-align: center;
+    text-transform: uppercase;
+    padding-top: 20px;
+}
+
+.text-nowrap {
+    white-space: nowrap;
+}
+
+.rst {
+    text-align: center;
+    padding-top: 15px;
+}
+
+@media screen and (min-width: 800px) {
+    .custom-collapse .collapse {
+        display: block;
+    }
+}
