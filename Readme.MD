@@ -1,10 +1,16 @@
 # Neighborhood Map
 
 This is a Udacity project as part the Full-Statck Web Developer nanodegree. The
-purpose of this project is to learn how to use external javascript libraries.
-For this project it was required to learn and understand the inner workings of
-the Knockout.js.
+purpose of this project is to learn how to use multiple different API's. Also
+using the javascript library Knockout.js to get information from the API's and
+use the fuctions of the javascript library to display them.
+
+I
 
 
+# Used
+
+ Languages - HTML5, CSS3, Javascript, Knockout.js, jQuery
+ API used - Google Maps API, Foursquare API
 
 # Sources

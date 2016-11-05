@@ -11,29 +11,55 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-	<div class="container-fluid">
-		<nav class="navbar navbar-default">
-			<div class="container-fluid">
+
+		<div id="over_map">
+			<div class="search-bar">
+				<div class="search">
+					<input class="form-control" id="search-box" data-bind="textInput: searchTerm, valueUpdate: 'afterkeydown'" />
+				</div>
+				<img class="search-btn" type="button" src="images/search.png" alt="serach button">
+			</div>
+			<!-- <nav class="navbar navbar-default text-center">
 				<div class="navbar-header">
 					<a class="navbar-brand" href="#">Boulder Strip Casinos</a>
-					<form class="navbar-form navbar-left">
+			 		<form class="navbar-form navbar-center">
 						<div class="search form-group" id="search">
-							<input class="search-box form-control" id="search-box" data-bind="textInput: searchTerm, valueUpdate: 'afterkeydown'" />
+							<input class="form-control" id="search-box" data-bind="textInput: searchTerm, valueUpdate: 'afterkeydown'" />
 						</div>
 					</form>
-				</nav>
-
-
-			<div  id="map">If you can read this, there has been an error loading Google Maps. Please Try Again.</div>
+				</div>
+			</nav> -->
+			<div class="locations">
+	  			<ul class="results" id="results"  data-bind="foreach: filteredList">
+	    		<li class="place" id="place" data-bind="text: name, click: bounce"></li>
+	  		</ul>
+			</div>
 		</div>
-	</div>
 
+		<div class="app" id="app">
+
+			<div class="map" id="map">If you can read this, there has been an error loading Google Maps. Please Try Again.</div>
+
+		
+<script src='js/lib/jquery-1.12.0.min.js'></script>
+	<script>
+	$(document).ready(function(){
+			$("#search-box").hide();
+
+	    $(".search-btn").click(function(){
+	        $("#search-box").slideToggle();
+	    });
+
+	});
+
+
+	</script>
 
 
 	<script src='js/lib/knockout-3.4.0.js'></script>
-	<script src='js/lib/jquery-1.12.0.min.js'></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+	<script src="js/lib/bootstrap.min.js" charset="utf-8"></script>
 	<script src='js/app.js'></script>
-	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDA6qoUKQ3WJQd4ZxAahhFPM80WJbw-yws&callback=startApp&libraries=places" onerror="errorHandling()"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDA6qoUKQ3WJQd4ZxAahhFPM80WJbw-yws&callback=startApp&libraries=places" onerror="errorHandling()"></script>
 </body>
 </html>
