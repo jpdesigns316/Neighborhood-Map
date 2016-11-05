@@ -10,14 +10,17 @@ clientID = "TP2NQO5LEORRMRP52IGDGN2MGOJKTBV4A3VNVOGAV5JMG23M";
 clientSecret = "1AEYC4PEHVPBR12QRVTXHVOSSHASE4YLM1FMNELLFSG10CVJ";
 
 
+// Model
 var initialLocations = [
-	{name: 'Calvary Chapel Vista', lat: 33.2106, long: -117.2333},
-	{name: 'Calvary Chapel Carlsbad', lat: 33.1202596, long: -117.27769219999999},
 	{name: 'Chik-Fil-A', lat: 33.1779847, long: -117.29627310000001},
+	{name: 'Buffalo Wild Wings', lat: 33.18185649999999, long: -117.32919190000001},
+	{name: 'Fresh MXN Food', lat: 33.138909, long: -117.19882010000003},
+	{name: 'KFC', lat: 33.2104598, long: -117.23445939999999},
 	{name: 'Miracosta College', lat: 33.1908, long: -117.3029},
 	{name: 'Ocean\'s 11 Casino', lat: 33.1992609, long: -117.36803050000003},
 	{name: 'Pair-A-Dice Games', lat: 33.1841, long: -117.2846},
-	{name: 'Teri Cafe II', lat: 33.1823806, long: -117.29232430000002},
+	{name: 'Teri Cafe I', lat: 33.1858874, long: -117.32724159999998},
+	{name: 'Teri Cafe II', lat: 33.1823806, long: -117.29232430000002}
 
 ];
 
@@ -43,8 +46,11 @@ function formatPhone(phonenum)
     }
 }
 
+
+// View
 var Location = function(data)
 {
+	// Declaration of variables
 	var self = this;
 	this.name = data.name;
 	this.lat = data.lat;
@@ -54,20 +60,32 @@ var Location = function(data)
 	this.description = "";
 	this.city = "";
 	this.phone = "";
+	this.twitter =  "";
+	this.contentString = "";
 
 	this.visible = ko.observable(true);
 
+
+	// Generate FourSqurare JSON to data mine
 	var foursquareURL = 'https://api.foursquare.com/v2/venues/search?ll='+ this.lat + ',' + this.long + '&client_id=' + clientID + '&client_secret=' + clientSecret + '&v=20160118' + '&query=' + this.name;
 
 	$.getJSON(foursquareURL).done(function(data) {
 		var results = data.response.venues[0];
 		self.URL = results.url;
-		if (typeof self.URL === 'undefined'){
-			self.URL = "";
-		}
+		self.description = data.response.description;
 		self.street = results.location.formattedAddress[0];
    	self.city = results.location.formattedAddress[1];
 		self.phone = results.contact.phone;
+		self.twitter = '@' + results.contact.twitter;
+
+		if (typeof self.URL === 'undefined'){
+			self.URL = "";
+		}
+
+		if (typeof self.description === 'undefined'){
+			self.description = "";
+		}
+
     if (typeof self.phone === 'undefined')
 		{
 			self.phone = "";
@@ -75,16 +93,15 @@ var Location = function(data)
 		{
 			self.phone = formatPhone(self.phone);
 		}
+
+		if (typeof self.twitter === '@undefined')
+		{
+			self.twitter = "";
+		}
 	}).fail(function()
 	{
 		alert("There was an error with the Foursquare API call. Please refresh the page and try again to load Foursquare data.");
 	});
-
-	this.contentString = '<div class="info-window-content"><div><b>' + data.name + "</b></div>" +
-				'<div class="content"><a href="' + self.URL +'">' + self.URL + "</a></div>" +
-        '<div class="content">' + self.street + "</div>" +
-        '<div class="content">' + self.city + "</div>" +
-        '<div class="content">' + self.phone + "</div></div>";
 
 	this.infoWindow = new google.maps.InfoWindow({content: self.contentString});
 
@@ -108,11 +125,12 @@ var Location = function(data)
 
 	this.marker.addListener('click', function()
 	{
-		self.contentString = '<div class="info-window-content"><strong>' + data.name + "</strong></div>" +
-        '<div class="content"><a href="' + self.URL +'">' + self.URL + "</a></div>" +
-        '<div class="content">' + self.street + "</div>" +
-        '<div class="content">' + self.city + "</div>" +
-        '<div class="content"><a href="tel:' + self.phone +'">' + self.phone +"</a></div></div>";
+		self.contentString = '<div class="info-window-content text-left"><div class="content">Name: <strong>' + data.name + '</strong></div>' +
+				'<div class="content">' + self.description + '</div>' +
+        '<div class="content"><a href="' + self.URL +'">' + self.URL + '</a></div>' +
+        '<div class="content">Address:' + self.street + '</div>' +
+        '<div class="content">' + self.city + '</div>' +
+        '<div class="content">Phone: <a href="tel:' + self.phone +'">' + self.phone + '</a></div></div>';
 
     self.infoWindow.setContent(self.contentString);
 
@@ -130,6 +148,7 @@ var Location = function(data)
 	};
 };
 
+// ViewModel
 function AppViewModel()
 {
 	var self = this;
@@ -140,8 +159,13 @@ function AppViewModel()
 
 	map = new google.maps.Map(document.getElementById('map'),
 	{
-			zoom: 12,
-			center: {lat: 33.18247, lng: -117.299738}
+			zoom: 13,
+			center: {lat: 33.18247, lng: -117.299738},
+			mapTypeControlOptions: {
+              style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+              position: google.maps.ControlPosition.TOP_CENTER
+          },
+
 	});
 
 

@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>South Bay Neighborhood Map</title>
+	<title>Oceanside Neighborhood Map</title>
 	<link rel="stylesheet" href="css/style.css">
 	<!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -17,18 +17,13 @@
 				<div class="search">
 					<input class="form-control" id="search-box" data-bind="textInput: searchTerm, valueUpdate: 'afterkeydown'" />
 				</div>
-				<img class="search-btn" type="button" src="images/search.png" alt="serach button">
-			</div>
-			<!-- <nav class="navbar navbar-default text-center">
-				<div class="navbar-header">
-					<a class="navbar-brand" href="#">Boulder Strip Casinos</a>
-			 		<form class="navbar-form navbar-center">
-						<div class="search form-group" id="search">
-							<input class="form-control" id="search-box" data-bind="textInput: searchTerm, valueUpdate: 'afterkeydown'" />
-						</div>
-					</form>
+				<div class="buttons text-center">
+					<img class="search-btn" type="button" src="images/search.png" alt="serach button">
+					<img class="location-btn" type="button" src="images/locations.png" alt="location button">
 				</div>
-			</nav> -->
+
+			</div>
+
 			<div class="locations">
 	  			<ul class="results" id="results"  data-bind="foreach: filteredList">
 	    		<li class="place" id="place" data-bind="text: name, click: bounce"></li>
@@ -40,19 +35,21 @@
 
 			<div class="map" id="map">If you can read this, there has been an error loading Google Maps. Please Try Again.</div>
 
-		
-<script src='js/lib/jquery-1.12.0.min.js'></script>
+
+	<script src='js/lib/jquery-1.12.0.min.js'></script>
 	<script>
 	$(document).ready(function(){
 			$("#search-box").hide();
+
 
 	    $(".search-btn").click(function(){
 	        $("#search-box").slideToggle();
 	    });
 
+			$(".location-btn").click(function(){
+	        $("#results").slideToggle();
+	    });
 	});
-
-
 	</script>
 
 
