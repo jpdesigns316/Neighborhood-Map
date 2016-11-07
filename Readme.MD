@@ -14,3 +14,5 @@ I
  API used - Google Maps API, Foursquare API
 
 # Sources
+
+Placement of information panel - https://developers.google.com/maps/documentation/javascript/examples/control-custom

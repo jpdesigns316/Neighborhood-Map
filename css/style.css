@@ -20,10 +20,13 @@
 }
 
 
+.search-bar {
+	background-color: white;
+	padding-top:  10px;
+}
+
 #map {
     width:100%;
-
-
 }
 
 .menu {
@@ -85,7 +88,7 @@ h1 {
 
 .search {
 	margin-left: 25px;
-	
+
 }
 
 .search-box {

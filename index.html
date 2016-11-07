@@ -14,12 +14,14 @@
 
 		<div id="over_map">
 			<div class="search-bar">
-				<div class="search">
-					<input class="form-control" id="search-box" data-bind="textInput: searchTerm, valueUpdate: 'afterkeydown'" />
+				<div class="search" id="search-box">
+					<label for="Search">Search: </label>
+					<input  data-bind="textInput: searchTerm, valueUpdate: 'afterkeydown'" />
 				</div>
 				<div class="buttons text-center">
 					<img class="search-btn" type="button" src="images/search.png" alt="serach button">
 					<img class="location-btn" type="button" src="images/locations.png" alt="location button">
+					<img class="info-btn" type="button" src="images/info.png" alt="info button">
 				</div>
 
 			</div>
@@ -40,6 +42,7 @@
 	<script>
 	$(document).ready(function(){
 			$("#search-box").hide();
+			$("#info").hide();
 
 
 	    $(".search-btn").click(function(){
@@ -48,6 +51,12 @@
 
 			$(".location-btn").click(function(){
 	        $("#results").slideToggle();
+					$("#info").hide();
+	    });
+
+			$(".info-btn").click(function(){
+	        $("#info").toggle();
+					$("#results").hide();
 	    });
 	});
 	</script>
