@@ -5,8 +5,6 @@ purpose of this project is to learn how to use multiple different API's. Also
 using the javascript library Knockout.js to get information from the API's and
 use the fuctions of the javascript library to display them.
 
-I
-
 
 # Used
 
@@ -15,4 +13,4 @@ I
 
 # Sources
 
-Placement of information panel - https://developers.google.com/maps/documentation/javascript/examples/control-custom
+lastres0rt  [South Bay Neighborhood Map] (https://github.com/lastres0rt/udacity-neighborhood-map-project)
