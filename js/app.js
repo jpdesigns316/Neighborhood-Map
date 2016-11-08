@@ -4,6 +4,7 @@
 var map;
 var clientID;
 var clientSecret;
+var locationInfomation;
 
 // Foursquare API settings
 clientID = "TP2NQO5LEORRMRP52IGDGN2MGOJKTBV4A3VNVOGAV5JMG23M";
@@ -61,9 +62,13 @@ var Location = function(data)
 	this.city = "";
 	this.phone = "";
 	this.twitter =  "";
+	this.categories = "";
+	this.menu = "";
 	this.contentString = "";
 
 	this.visible = ko.observable(true);
+
+
 
 
 	// Generate FourSqurare JSON to data mine
@@ -71,28 +76,33 @@ var Location = function(data)
 
 	$.getJSON(foursquareURL).done(function(data) {
 		var results = data.response.venues[0];
-		self.URL = results.url;
-		self.description = data.response.description;
+		self.URL = "";
+
 		self.street = results.location.formattedAddress[0];
    	self.city = results.location.formattedAddress[1];
-		self.phone = results.contact.phone;
+		self.phone = results.contact.formattedPhone;
 		self.twitter = '@' + results.contact.twitter;
+		self.menu = results.menu.url;
+		self.categories = results.categories.name;
 
-		// Logic to not display 'undefined'
-		if (typeof self.URL === 'undefined'){
-			self.URL = "";
-		}
 
-		if (typeof self.description === 'undefined'){
-			self.description = "";
+
+
+
+
+		// Logic to not display 'undefined'. Checks to see if string in undefined, if so then leave blank.
+		if (results.URL != 'undefined'){
+			self.URL = results.url;
 		}
 
     if (typeof self.phone === 'undefined')
 		{
 			self.phone = "";
-		} else
+		}
+
+		if (typeof self.url === 'undefined')
 		{
-			self.phone = formatPhone(self.phone);
+			self.url = "";
 		}
 
 		if (typeof self.twitter === '@undefined')
@@ -128,17 +138,33 @@ var Location = function(data)
 
 	this.marker.addListener('click', function()
 	{
-		self.contentString = '<div class="info-window-content text-left"><div class="content">Name: <strong>' + data.name + '</strong></div>' +
-				'<div class="content">' + self.description + '</div>' +
+		self.contentString = '<div class="info-window-content text-left"><div class="content"><strong>' + data.name + '</strong></div>' +
         '<div class="content"><a href="' + self.URL +'">' + self.URL + '</a></div>' +
         '<div class="content">Address:' + self.street + '</div>' +
-        '<div class="content">' + self.city + '</div>';
+        '<div class="content">' + self.city + '</div>' +
+				'<div class="content">Click info button for more information</div>'
+				;
 
+		self.infoContent = '<div class="info-window-content text-left"><div class="content">Name: <strong>' + data.name + '</strong></div>' +
+						'<div class="content">' + self.description + '</div>' +
+						'<div class="content"><a href="' + self.URL +'">' + self.URL + '</a></div>' +
+						'<div class="content">Address:' + self.street + '</div>' +
+						'<div class="content">' + self.city + '</div>' +
+						'<div class="content">' + self.menu + '</div>'
 
-		if (self.twitter != "@undefined") {
-			self.contentString +=  '<div class="content"><a href="https://twitter.com/search?q=' + self.twitter + '&src=typd" target="_blank">' + self.twitter + '</div>' +
+		if (self.twitter != "undefined") {
+			self.infoContent +=  '<div class="content"><a href="https://twitter.com/search?q=' + self.twitter + '&src=typd" target="_blank">' + self.twitter + '</div>' +
 														 '<div class="content">Phone: <a href="tel:' + self.phone +'">' + self.phone + '</a></div></div>'
 		}
+
+		$("#info-panel").html(self.infoContent);
+
+		$("#info-panel").toggle();
+
+		google.maps.event.addListener(self.infoWindow,'closeclick',function(){
+   	$("#info-panel").toggle();
+
+});
     self.infoWindow.setContent(self.contentString);
 
 		self.infoWindow.open(map, this);
@@ -156,7 +182,7 @@ var Location = function(data)
 };
 
 // ViewModel
-function AppViewModel()
+function ViewModel()
 {
 	var self = this;
 
@@ -209,7 +235,7 @@ function AppViewModel()
 
 function startApp()
 {
-	ko.applyBindings(new AppViewModel());
+	ko.applyBindings(new ViewModel());
 }
 
 function errorHandling()

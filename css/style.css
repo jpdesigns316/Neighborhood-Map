@@ -20,9 +20,13 @@
 }
 
 
-.search-bar {
+#search-bar {
 	background-color: white;
 	padding-top: : 10px;
+}
+
+#info-panel {
+	background-color: white;
 }
 
 #map {

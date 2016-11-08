@@ -13,7 +13,7 @@
 <body>
 
 		<div id="over_map">
-			<div class="search-bar">
+			<div id="search-bar">
 				<div class="search" id="search-box">
 					<label for="Search">Search: </label>
 					<input  data-bind="textInput: searchTerm, valueUpdate: 'afterkeydown'" />
@@ -21,7 +21,7 @@
 				<div class="buttons text-center">
 					<img class="search-btn" type="button" src="images/search.png" alt="serach button">
 					<img class="location-btn" type="button" src="images/locations.png" alt="location button">
-					
+					<img class="info-btn" type="button" src="images/info.png" alt="info button">
 				</div>
 
 			</div>
@@ -32,7 +32,9 @@
 	  		</ul>
 			</div>
 
-
+			<div id="info-panel">
+				<p>This is a test!</p>
+			</div>
 		</div>
 
 		<div class="app" id="app">
@@ -44,7 +46,7 @@
 	<script>
 	$(document).ready(function(){
 			$("#search-box").hide();
-			$("#info").hide();
+			$("#info-panel").hide();
 
 
 	    $(".search-btn").click(function(){
@@ -53,11 +55,11 @@
 
 			$(".location-btn").click(function(){
 	        $("#results").slideToggle();
-					$("#info").hide();
+					$("#info-panel").hide();
 	    });
 
 			$(".info-btn").click(function(){
-	        $("#info").toggle();
+	        $("#info-panel").toggle();
 					$("#results").hide();
 	    });
 	});
