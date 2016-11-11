@@ -15,9 +15,6 @@ var initialLocations = [
 	{name: 'Buffalo Wild Wings', lat: 33.18185649999999, long: -117.32919190000001},
 	{name: 'Fresh MXN Food', lat: 33.138909, long: -117.19882010000003},
 	{name: 'KFC', lat: 33.2104598, long: -117.23445939999999},
-	{name: 'Miracosta College', lat: 33.1908, long: -117.3029},
-	{name: 'Ocean\'s 11 Casino', lat: 33.1992609, long: -117.36803050000003},
-	{name: 'Pair-A-Dice Games', lat: 33.1841, long: -117.2846},
 	{name: 'Teri Cafe I', lat: 33.1858874, long: -117.32724159999998},
 	{name: 'Teri Cafe II', lat: 33.1823806, long: -117.29232430000002}
 
@@ -57,12 +54,14 @@ var Location = function(data)
 
 	$.getJSON(foursquareURL).done(function(data) {
 		var results = data.response.venues[0];
-		self.URL = '';
 
+
+		self.URL = results.url;
 		self.street = results.location.formattedAddress[0];
    	self.city = results.location.formattedAddress[1];
 		self.phone = results.contact.formattedPhone;
 		self.twitter = results.contact.twitter;
+		self.categories = results.categories[0].name;
 
 		if (!self.mobile)
 		{
@@ -72,12 +71,9 @@ var Location = function(data)
 				self.menu = results.menu.mobileUrl;
 		}
 
-		self.categories = results.categories.name;
+
 
 		// Logic to not display 'undefined'. Checks to see if string in undefined, if so then leave blank.
-		if (results.URL != 'undefined'){
-			self.URL = results.url;
-		}
 
     if (self.phone === undefined)
 		{
@@ -89,7 +85,7 @@ var Location = function(data)
 			self.url = '';
 		}
 
-		if (self.twitter === '@undefined')
+		if (self.twitter === 'undefined')
 		{
 			self.twitter = '';
 		}
@@ -128,6 +124,7 @@ var Location = function(data)
 
 	this.marker.addListener('click', function()
 	{
+
 		// Add basic infmation to the info window.
 		self.contentString = '<div class="information-panel-content"><div class="content"><strong>' + data.name + '</strong></div>' +
         '<div class="content">' + self.street + '</div>' +
@@ -136,22 +133,20 @@ var Location = function(data)
 
 		// Add information to the #info-panel for more in-depth infomation about the chosen location.
 		self.infoContent = '<div class="information-panel-content text-left"><div><strong>Name: </strong>' + data.name + '</div>' +
+						    				'<div class="info-content"><strong>URL: </strong><a href="' + self.URL +'">' + self.URL + '</a></div>' +
+												'<div class="info-content"><strong>Address 1: </strong>Address:' + self.street + '</div>' +
+												'<div class="info-content"><strong>Address 2: </strong>' + self.city + '</div>' +
+												'<div class="info-content"><strong>Menu:</strong> <a href="' + self.menu + '" target="_blank">'+self.menu+'</a></div>';
 
-						'<div class="info-content"><strong>URL: </strong><a href="' + self.URL +'">' + self.URL + '</a></div>' +
-						'<div class="info-content"><strong>Address</strong>Address:' + self.street + '</div>' +
-						'<div class="info-content">' + self.city + '</div>';
-
-
-		if (self.menu !== '')
-		{
-			self.infoContent += '<div class="info-content"><strong>Menu:</strong> <a href="' + self.menu + '" target="_blank">'+self.menu+'</a></div>';
-		}
-
-		if (self.twitter !== null) {
+		// Add Twitter account if location has one
+		if (typeof self.twitter !== 'undefined') {
 			self.infoContent +=  '<div class="info-content"><strong>Twitter</strong> @<a href="https://twitter.com/search?q=' + self.twitter + '&src=typd" target="_blank">' + self.twitter + '</a></div>';
 		}
 
-		self.infoContent += '<div class="info-content"><strong>Phone:</strong><a href="tel:' + self.phone +'">' + self.phone + '</a></div></div>';
+		self.infoContent += '<div class="info-content"><strong>Phone:</strong><a href="tel:' + self.phone +'">' + self.phone + '</a></div>' +
+												'<div class="info-content"><strong>Categories: </strong>' + self.categories + '</div></div>';
+
+		// Add an informtion to the #info-panel to be displayed there.
 		$("#info-panel").html(self.infoContent);
 		$(".info-content").css({"padding-top": "10px"});
 
