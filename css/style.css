@@ -1,29 +1,25 @@
-
-#search-bar {
-	padding-top: : 10px;
-	width: 400px;
+.search-bar {
+    padding-top: 10px;
+    width: 400px;
 }
 
-#info-panel {
-	padding: 25px;
+.info-panel {
+    padding: 25px;
 }
 
 .info-window-content {
-	padding: 20px;
+    padding: 20px;
 }
 
-#map {
-    width:100%;
+.map {
+    width: 100%;
 }
 
 .menu {
-	margin: auto;
+    margin: auto;
     width: 50%;
-
     padding: 10px;
 }
-
-
 
 h1 {
     color: white;
@@ -31,12 +27,9 @@ h1 {
     opacity: 1.0;
 }
 
-.locations,
-.maps {
+.locations, .maps {
     margin-top: 10px;
-
 }
-
 
 .ham {
     font-size: 30px;
@@ -53,11 +46,11 @@ h1 {
     white-space: nowrap;
 }
 
-#over_map {
-	position: absolute;
-	top: 10px;
-	left: 10px;
-	z-index: 99;
+.over_map {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 99;
 }
 
 .rst {
@@ -65,66 +58,57 @@ h1 {
     padding-top: 15px;
 }
 
-
-#search-box {
-	margin-left: 25px;
-	flex-grow: 1;
-	background-color: white;
-	height: 50px;
-	font-size: 1em;
-	padding: 5px 20px;
+.search-box {
+    margin-left: 25px;
+    flex-grow: 1;
+    background-color: white;
+    height: 50px;
+    font-size: 1em;
+    padding: 5px 20px;
 }
 
 .app {
-	width: 100%;
-	height: 100%;
-	display: flex;
+    width: 100%;
+    height: 100%;
+    display: flex;
 }
 
 .list {
-	order: 1;
-	flex-grow: 1;
-
+    order: 1;
+    flex-grow: 1;
 }
 
 .map {
-	order: 2;
-	flex-grow: 4;
-
-	text-align: center;
-	height: 1000px;
+    order: 2;
+    flex-grow: 4;
+    text-align: center;
+    height: 1000px;
 }
 
 .results {
-	background-color: #fff;
-	margin: 0;
-	padding: 0;
+    background-color: #fff;
+    margin: 0;
+    padding: 0;
 }
-
 
 .place {
     margin: 10px;
     padding: 10px;
     list-style: none;
-
 }
 
-
-@media only screen and (max-device-width : 959px), only screen and (max-width : 959px)  {
-
-.app {
-	flex-direction: column;
+@media only screen and (max-device-width: 959px), only screen and (max-width: 959px) {
+    .app {
+        flex-direction: column;
+    }
+    .info-content {
+        padding-top: 50px;
+    }
+    .list {
+        font-size: 1.5em;
+    }
 }
 
-.info-content {
-	padding-top: 50px;
-	border: 2px pink solid;
-}
-.list {
-	font-size: 1.5em;
-}
-
-}
 @media screen and (min-width: 800px) {
     .custom-collapse .collapse {
         display: block;
