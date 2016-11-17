@@ -13,7 +13,7 @@
 </head>
 
 <body>
-<div class="containter">
+<div class="containter-fluid">
   <div class="over_map">
     <div class="search-bar">
       <div class="search-box">
@@ -27,7 +27,8 @@
     </div>
     <div class="locations">
       <ul class="results" id="results" data-bind="foreach: filteredList">
-        <li class="place" id="place" data-bind="text: name, click: bounce"></li>
+        <strong><li class="place" id="place" data-bind="text: name, click: bounce"></li></strong>
+        
       </ul>
     </div>
   </div>
@@ -35,7 +36,7 @@
   <div class="app" id="app">
     <div class="map" id="map">If you can read this, there has been an error loading Google Maps. Please Try Again.</div>
 	</div>
-  
+
 </div>
 
     <script src='js/lib/jquery-1.12.0.min.js'></script>

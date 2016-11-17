@@ -1,8 +1,3 @@
-.search-bar {
-    padding-top: 10px;
-    width: 400px;
-}
-
 .info-panel {
     padding: 25px;
 }
@@ -15,26 +10,14 @@
     width: 100%;
 }
 
-.menu {
-    margin: auto;
-    width: 50%;
-    padding: 10px;
-}
-
-h1 {
-    color: white;
-    font-size: 80px!important;
-    opacity: 1.0;
-}
-
 .locations, .maps {
     margin-top: 10px;
 }
 
-.ham {
-    font-size: 30px;
+.locations {
+		background-color: grey;
+		border: 1px black solid;
 }
-
 .footer {
     font-weight: bold;
     text-align: center;
@@ -101,9 +84,7 @@ h1 {
     .app {
         flex-direction: column;
     }
-    .info-content {
-        padding-top: 50px;
-    }
+
     .list {
         font-size: 1.5em;
     }
