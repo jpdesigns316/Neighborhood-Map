@@ -36,11 +36,6 @@
     z-index: 99;
 }
 
-.rst {
-    text-align: center;
-    padding-top: 15px;
-}
-
 .search-box {
     margin-left: 25px;
     flex-grow: 1;
@@ -65,7 +60,7 @@
     order: 2;
     flex-grow: 4;
     text-align: center;
-    height: 1000px;
+    height: 500px;
 }
 
 .results {

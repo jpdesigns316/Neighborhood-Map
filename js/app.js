@@ -8,49 +8,22 @@ var CLIENT_SECRET = "1AEYC4PEHVPBR12QRVTXHVOSSHASE4YLM1FMNELLFSG10CVJ";
 
 
 // Model
-var initialLocations = [{
-        name: 'Chik-Fil-A',
-        lat: 33.1779847,
-        long: -117.29627310000001,
-        categories: "Fast Food Restaurant",
-        foursquareLink: "chickfila-quarry-creek/4b0d93b1f964a520674b23e3"
-    }, {
-        name: 'Buffalo Wild Wings',
-        lat: 33.18185649999999,
-        long: -117.32919190000001,
-        categories: "Wings Joint",
-        foursquareLink: "buffalo-wild-wings/53a492c0498ea5554f6182c4"
-    }, {
-        name: 'Fresh MXN Food',
-        lat: 33.138909,
-        long: -117.19882010000003,
-        categories: "Mexican Restaurant",
-        foursquareLink: "fresh-mxn-food-san-marcos/4abed1eff964a520159020e3"
-    }, {
-        name: 'KFC',
-        lat: 33.2104598,
-        long: -117.23445939999999,
-        categories: "Fried Chicken Joint",
-        foursquareLink: "kfc/4bb81ad93db7b713480c219a"
-    }, {
-        name: 'Ocean\'s Eleven Casino',
-        lat: 33.2000485,
-        long: -117.36925450000001,
-        categories: "Casino",
-        foursquareLink: "oceans-eleven-casino/4b5b5e04f964a52037f828e3"
-    }, {
-        name: 'Teri Cafe I',
-        lat: 33.18524330989122,
-        long: -117.3272989435073,
-        categories: "Japanese Restaurant",
-        foursquareLink: "teri-cafe/4a8b5a56f964a5203a0c20e3"
-    }, {
-        name: 'Teri Cafe II',
-        lat: 33.1823806,
-        long: -117.29232430000002,
-        categories: "Japanese Restaurant",
-        id: "teri-cafe/4b0749b1f964a52059fb22e3"
-    }
+function Location(name, lat, long, categories, foursquareUrl) {
+    this.name = name;
+    this.lat = lat;
+    this.long = long;
+    this.categories = categories;
+    this.foursquareUrl = foursquareUrl;
+}
+var initialLocations = [
+    new Location('Chik-Fil-A', 33.1779847, -117.29627310000001, "Fast Food Restaurant", "chickfila-quarry-creek/4b0d93b1f964a520674b23e3"),
+    new Location('Buffalo Wild Wings', 33.18185649999999, -117.32919190000001, "Wings Joint", "buffalo-wild-wings/53a492c0498ea5554f6182c4"),
+    new Location('Fresh MXN Food', 33.138909, -117.19882010000003, "Mexican Restaurant", "fresh-mxn-food-san-marcos/4abed1eff964a520159020e3"),
+    new Location('KFC', 33.2104598, -117.23445939999999, "Fried Chicken Joint", "kfc/4bb81ad93db7b713480c219a"),
+    new Location('Ocean\'s Eleven Casino', 33.200048, -117.36925450000001, "Casino", "oceans-eleven-casino/4b5b5e04f964a52037f828e3"),
+    new Location('Teri Cafe I', 33.18524330989122, -117.3272989435073, "Japanese Restaurant", "teri-cafe/4a8b5a56f964a5203a0c20e3"),
+    new Location('Teri Cafe II', 33.1823806, -117.29232430000002, "Japanese Restaurant", "teri-cafe/4b0749b1f964a52059fb22e3")
+
 
 ];
 
@@ -70,9 +43,6 @@ var Location = function(data) {
 
     this.visible = ko.observable(true);
 
-
-
-
     // Generate FourSqurare JSON to data mine
     var foursquareURL = 'https://api.foursquare.com/v2/venues/search?ll=' +
         this.lat + ',' + this.long + '&client_id=' + CLIENT_ID +
@@ -90,25 +60,19 @@ var Location = function(data) {
             self.menu = '';
         }
 
-
         // Logic to not display 'undefined'. Checks to see if string in
         // undefined, if so then leave blank.
-
         self.twitter = self.twitter ? self.twitter : "";
         self.menu = self.menu ? self.menu : "";
-
 
     }).fail(function() {
         alert("There was an error with the Foursquare API call. Please " +
             "refresh the page and try again to load Foursquare data.");
     });
 
-
-
     this.infoWindow = new google.maps.InfoWindow({
         content: self.contentString
     });
-
 
     this.marker = new google.maps.Marker({
         position: new google.maps.LatLng(data.lat, data.long),
@@ -126,7 +90,7 @@ var Location = function(data) {
         return true;
     }, this);
 
-    this.marker.addListener('click', function() {
+    google.maps.event.addListener(this.marker, 'click', function() {
 
         // Add information to the #info-panel for more in-depth infomation
         // about the chosen location.
@@ -157,6 +121,7 @@ var Location = function(data) {
 
         self.infoWindow.open(map, this);
 
+
         self.marker.setAnimation(google.maps.Animation.BOUNCE);
         setTimeout(function() {
             self.marker.setAnimation(null);
@@ -165,6 +130,7 @@ var Location = function(data) {
 
     this.bounce = function(place) {
         google.maps.event.trigger(self.marker, 'click');
+        this.marker.infoWindow.close();
     };
 };
 
@@ -198,6 +164,7 @@ function initMap() {
     map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(foursquareLogo);
 
 }
+
 // ViewModel
 function ViewModel() {
 
