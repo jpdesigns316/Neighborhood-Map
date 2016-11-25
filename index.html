@@ -13,33 +13,34 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-default">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="#">Places in Oceanside, Ca</a>
-            </div>
-            <ul class="nav navbar-nav">
+    <div class="containter-fluid">
+        <nav class="panel-default">
+            <div class="search-bar" id="search">
+                <div class="search-box">
 
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="supportedContentDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Locations</a>
-                    <div class="dropdown-menu locations" aria-labelledby="supportedContentDropdown">
-                        <ul class="results" id="results" data-bind="foreach: filteredList">
-                            <strong><li class="place" id="place" data-bind="text: name, click: bounce"></li></strong>
-
-                    </div>
-                </li>
-                </ul>
-                <form class="form-inline float-xs-right">
+                    <label>Search: </label>
                     <input data-bind="textInput: searchTerm" />
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                </form>
-    </nav>
-    </header>
+                </div>
+            </div>
+            <div class="buttonDiv" id="buttonDiv">
 
+                <img class="location-btn img-responsive" id="location-btn" data-bind="click: slideLocations, attr: {src: 'images/locations.png'}" alt="location button">
+            </div>
 
-    <div class="app" id="app">
-        <div class="map" id="map">If you can read this, there has been an error loading Google Maps. Please Try Again.</div>
-    </div>
+            <div class="locations" id="locations">
+                <ul class="results" id="results" data-bind="foreach: filteredList">
+                    <strong><li class="place" id="place" data-bind="text: name, click: bounce"></li></strong>
+
+                </ul>
+            </div>
+        </nav>
+
+        <main class="app" id="app">
+            <div class="map" id="map">If you can read this, there has been an error loading Google Maps. Please Try Again.</div>
+        </main>
+        <footer class="panel-footer text-center">
+            <img data-bind="attr: {src: 'images/logo_foursquare.png'}" alt="">
+        </footer>
 
     </div>
 

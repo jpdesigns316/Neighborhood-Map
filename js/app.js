@@ -18,7 +18,7 @@ function Location(name, lat, long, categories, foursquareUrl) {
 var initialLocations = [
     new Location('Chik-Fil-A', 33.1779847, -117.29627310000001, "Fast Food Restaurant", "chickfila-quarry-creek/4b0d93b1f964a520674b23e3"),
     new Location('Buffalo Wild Wings', 33.18185649999999, -117.32919190000001, "Wings Joint", "buffalo-wild-wings/53a492c0498ea5554f6182c4"),
-    new Location('Fresh MXN Food', 33.138909, -117.19882010000003, "Mexican Restaurant", "fresh-mxn-food-san-marcos/4abed1eff964a520159020e3"),
+    new Location('Fresh MXN Food', 33.1331199, -117.1974391, "Mexican Restaurant", "fresh-mxn-food-san-marcos/4abed1eff964a520159020e3"),
     new Location('KFC', 33.2104598, -117.23445939999999, "Fried Chicken Joint", "kfc/4bb81ad93db7b713480c219a"),
     new Location('Ocean\'s Eleven Casino', 33.200048, -117.36925450000001, "Casino", "oceans-eleven-casino/4b5b5e04f964a52037f828e3"),
     new Location('Teri Cafe I', 33.18524330989122, -117.3272989435073, "Japanese Restaurant", "teri-cafe/4a8b5a56f964a5203a0c20e3"),
@@ -32,6 +32,9 @@ var Location = function(data) {
     // Declaration of variables t collect infomation for the FourSqurare API
     var self = this;
 
+
+
+
     self.location = ko.observableArray();
     this.name = data.name;
     this.lat = data.lat;
@@ -39,15 +42,16 @@ var Location = function(data) {
     this.menu = '';
     this.categories = '';
 
-    this.contentString = '';
+    this.infoWindow = new google.maps.InfoWindow();
+    this.bounds = new google.maps.LatLngBounds();
 
     this.visible = ko.observable(true);
-
     // Generate FourSqurare JSON to data mine
     var foursquareURL = 'https://api.foursquare.com/v2/venues/search?ll=' +
         this.lat + ',' + this.long + '&client_id=' + CLIENT_ID +
         '&client_secret=' + CLIENT_SECRET + '&v=20161114' +
         '&query=' + this.name;
+
 
     $.getJSON(foursquareURL).done(function(data) {
         var results = data.response.venues[0];
@@ -70,9 +74,7 @@ var Location = function(data) {
             "refresh the page and try again to load Foursquare data.");
     });
 
-    this.infoWindow = new google.maps.InfoWindow({
-        content: self.contentString
-    });
+
 
     this.marker = new google.maps.Marker({
         position: new google.maps.LatLng(data.lat, data.long),
@@ -80,6 +82,7 @@ var Location = function(data) {
         title: data.name
     });
 
+    this.bounds.extend(this.marker.position);
 
     this.showMarker = ko.computed(function() {
         if (this.visible() === true) {
@@ -90,13 +93,17 @@ var Location = function(data) {
         return true;
     }, this);
 
+
+
     google.maps.event.addListener(this.marker, 'click', function() {
+
+        var oldInfo = "";
 
         // Add information to the #info-panel for more in-depth infomation
         // about the chosen location.
         self.infoContent = '<div class="infor-panel-content">' +
             '<div><strong><a href="https://foursquare.com/v/' +
-            data.foursquareLink + '" target="_blank">' + data.name +
+            data.foursquareUrl + '" target="_blank">' + data.name +
             '</a></strong></div>';
 
         if (self.menu !== '') {
@@ -115,11 +122,17 @@ var Location = function(data) {
         self.infoContent += '<div class="info-content"><strong>Categories: ' +
             '</strong>' + data.categories + '</div></div>';
 
-        // Add an informtion to the #info-panel to be displayed there.
 
         self.infoWindow.setContent(self.infoContent);
 
+        if (oldInfo) self.infoWindow.close();
+
+        oldInfo = self.infoWindow;
+
+        map.panTo(self.marker.getPosition())
+
         self.infoWindow.open(map, this);
+
 
 
         self.marker.setAnimation(google.maps.Animation.BOUNCE);
@@ -130,15 +143,18 @@ var Location = function(data) {
 
     this.bounce = function(place) {
         google.maps.event.trigger(self.marker, 'click');
-        this.marker.infoWindow.close();
+
     };
+
+
 };
 
 
 function initMap() {
     var mapID = document.getElementById('map');
-    var foursquareLogo = document.createElement("IMG");
-    var searchBar = document.getElementsByClassName('search-bar');
+    var buttons = document.getElementById('buttonDiv');
+    var locations = document.getElementById('locations');
+    var search = document.getElementById('search');
 
     map = new google.maps.Map(mapID, {
         zoom: 13,
@@ -155,13 +171,13 @@ function initMap() {
 
     google.maps.event.trigger(map, "resize");
 
-    // Using Custom Controls to add images to map
+    buttons.index = 1;
 
-    foursquareLogo.setAttribute("src", "images/logo_foursquare.png");
-    foursquareLogo.setAttribute("alt", "Data provided by Foursqure.com");
+    map.controls[google.maps.ControlPosition.TOP].push(search);
+    map.controls[google.maps.ControlPosition.TOP_LEFT].push(buttons);
+    map.controls[google.maps.ControlPosition.LEFT].push(locations);
 
-    map.controls[google.maps.ControlPosition.TOP].push(searchBar[0]);
-    map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(foursquareLogo);
+
 
 }
 
@@ -190,8 +206,10 @@ function ViewModel() {
         } else {
             return ko.utils.arrayFilter(self.locationList(),
                 function(locationItem) {
-                    var string = locationItem.name.toLowerCase();
-                    var result = (string.search(filter) >= 0);
+                    var location = locationItem.name.toLowerCase();
+                    var categroy = locationItem.categories.toLowerCase();
+                    var result = (location.search(filter) >= 0 ||
+                        categroy.search(filter) >= 0);
                     locationItem.visible(result);
                     return result;
                 });
@@ -200,6 +218,20 @@ function ViewModel() {
 
     this.mapElem = document.getElementById('map');
     this.mapElem.style.height = window.innerHeight - 250;
+
+
+    var locations = document.getElementById("locations");
+
+    self.numberOfClicks = ko.observable(0);
+    self.slideLocations = function() {
+        if (document.getElementById("locations").style.display === "none") {
+            document.getElementById("locations").style.display = "block";
+        } else {
+            document.getElementById("locations").style.display = "none";
+        }
+
+
+    };
 }
 
 function startApp() {
