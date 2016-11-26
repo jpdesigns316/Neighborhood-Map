@@ -1,11 +1,11 @@
 // Declaring global variables now to satisfy strict mode
 var map;
 var locationInfomation;
+var currentWindow = false;
 
 // Foursquare API settings
 var CLIENT_ID = "TP2NQO5LEORRMRP52IGDGN2MGOJKTBV4A3VNVOGAV5JMG23M";
 var CLIENT_SECRET = "1AEYC4PEHVPBR12QRVTXHVOSSHASE4YLM1FMNELLFSG10CVJ";
-
 
 // Model
 function Location(name, lat, long, categories, foursquareUrl) {
@@ -15,25 +15,50 @@ function Location(name, lat, long, categories, foursquareUrl) {
     this.categories = categories;
     this.foursquareUrl = foursquareUrl;
 }
+
 var initialLocations = [
-    new Location('Chik-Fil-A', 33.1779847, -117.29627310000001, "Fast Food Restaurant", "chickfila-quarry-creek/4b0d93b1f964a520674b23e3"),
-    new Location('Buffalo Wild Wings', 33.18185649999999, -117.32919190000001, "Wings Joint", "buffalo-wild-wings/53a492c0498ea5554f6182c4"),
-    new Location('Fresh MXN Food', 33.1331199, -117.1974391, "Mexican Restaurant", "fresh-mxn-food-san-marcos/4abed1eff964a520159020e3"),
-    new Location('KFC', 33.2104598, -117.23445939999999, "Fried Chicken Joint", "kfc/4bb81ad93db7b713480c219a"),
-    new Location('Ocean\'s Eleven Casino', 33.200048, -117.36925450000001, "Casino", "oceans-eleven-casino/4b5b5e04f964a52037f828e3"),
-    new Location('Teri Cafe I', 33.18524330989122, -117.3272989435073, "Japanese Restaurant", "teri-cafe/4a8b5a56f964a5203a0c20e3"),
-    new Location('Teri Cafe II', 33.1823806, -117.29232430000002, "Japanese Restaurant", "teri-cafe/4b0749b1f964a52059fb22e3")
-
-
+    new Location('Chik-Fil-A',
+        33.1779847, -117.29627310000001,
+        "Fast Food, Chicken",
+        "chickfila-quarry-creek/4b0d93b1f964a520674b23e3"),
+    new Location('Buffalo Wild Wings',
+        33.18185649999999, -117.32919190000001,
+        "Wings Joint",
+        "buffalo-wild-wings/53a492c0498ea5554f6182c4"),
+    new Location('Fresh MXN Food',
+        33.1331199, -117.1974391,
+        "Mexican Restaurant",
+        "fresh-mxn-food-san-marcos/4abed1eff964a520159020e3"),
+    new Location('KFC',
+        33.2104598, -117.23445939999999,
+        "Fried Chicken",
+        "kfc/4bb81ad93db7b713480c219a"),
+    new Location('Lamppost Pizza',
+        33.20001139999999, -117.2447512,
+        "Pizza",
+        "lamppost-pizza--backstreet-brewery/4af86edbf964a520380d22e3")
+    new Location('Ocean\'s Eleven Casino',
+        33.200048, -117.36925450000001,
+        "Casino, Poker, Blackjack",
+        "oceans-eleven-casino/4b5b5e04f964a52037f828e3"),
+    new Location('Teri Cafe I',
+        33.18524330989122, -117.3272989435073,
+        "Japanese, Sushi",
+        "teri-cafe/4a8b5a56f964a5203a0c20e3"),
+    new Location('Teri Cafe II',
+        33.1823806, -117.29232430000002,
+        "Japanese, Sushi",
+        "teri-cafe/4b0749b1f964a52059fb22e3"),
+    new Location('That Pizza Place',
+        33.17644019999999, -117.3247364,
+        "Pizza",
+        "that-pizza-place/4a81f2f0f964a52019f81fe3")
 ];
 
 // View
 var Location = function(data) {
     // Declaration of variables t collect infomation for the FourSqurare API
     var self = this;
-
-
-
 
     self.location = ko.observableArray();
     this.name = data.name;
@@ -51,7 +76,6 @@ var Location = function(data) {
         this.lat + ',' + this.long + '&client_id=' + CLIENT_ID +
         '&client_secret=' + CLIENT_SECRET + '&v=20161114' +
         '&query=' + this.name;
-
 
     $.getJSON(foursquareURL).done(function(data) {
         var results = data.response.venues[0];
@@ -74,8 +98,6 @@ var Location = function(data) {
             "refresh the page and try again to load Foursquare data.");
     });
 
-
-
     this.marker = new google.maps.Marker({
         position: new google.maps.LatLng(data.lat, data.long),
         map: map,
@@ -93,11 +115,7 @@ var Location = function(data) {
         return true;
     }, this);
 
-
-
     google.maps.event.addListener(this.marker, 'click', function() {
-
-        var oldInfo = "";
 
         // Add information to the #info-panel for more in-depth infomation
         // about the chosen location.
@@ -122,18 +140,19 @@ var Location = function(data) {
         self.infoContent += '<div class="info-content"><strong>Categories: ' +
             '</strong>' + data.categories + '</div></div>';
 
+        if (self.infoWindow) {
+            self.infoWindow.close();
+        }
+
+        if (currentWindow) currentWindow.close();
 
         self.infoWindow.setContent(self.infoContent);
-
-        if (oldInfo) self.infoWindow.close();
-
-        oldInfo = self.infoWindow;
 
         map.panTo(self.marker.getPosition())
 
         self.infoWindow.open(map, this);
 
-
+        currentWindow = self.infoWindow;
 
         self.marker.setAnimation(google.maps.Animation.BOUNCE);
         setTimeout(function() {
@@ -143,10 +162,7 @@ var Location = function(data) {
 
     this.bounce = function(place) {
         google.maps.event.trigger(self.marker, 'click');
-
     };
-
-
 };
 
 
@@ -171,14 +187,12 @@ function initMap() {
 
     google.maps.event.trigger(map, "resize");
 
+    // Place the 'div' onto the google map creating custom controls
+    // developers.google.com/maps/documentation/javascript/examples/control-custom
     buttons.index = 1;
-
     map.controls[google.maps.ControlPosition.TOP].push(search);
     map.controls[google.maps.ControlPosition.TOP_LEFT].push(buttons);
     map.controls[google.maps.ControlPosition.LEFT].push(locations);
-
-
-
 }
 
 // ViewModel
@@ -192,10 +206,14 @@ function ViewModel() {
 
     initMap();
 
+
     initialLocations.forEach(function(locationItem) {
         self.locationList.push(new Location(locationItem));
     });
 
+
+    // Filter through the locations to only dispay the current location or
+    // locations that have the categroy.
     this.filteredList = ko.computed(function() {
         var filter = self.searchTerm().toLowerCase();
         if (!filter) {
@@ -222,7 +240,8 @@ function ViewModel() {
 
     var locations = document.getElementById("locations");
 
-    self.numberOfClicks = ko.observable(0);
+    // Create a transition to hide or display the locations 'div' by using
+    // the click binding.
     self.slideLocations = function() {
         if (document.getElementById("locations").style.display === "none") {
             document.getElementById("locations").style.display = "block";

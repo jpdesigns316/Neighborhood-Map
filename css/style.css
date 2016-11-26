@@ -18,28 +18,7 @@
     margin-top: 50px;
 }
 
-.footer {
-    font-weight: bold;
-    text-align: center;
-    text-transform: uppercase;
-    padding-top: 20px;
-}
 
-.text-nowrap {
-    white-space: nowrap;
-}
-
-.over_map {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    z-index: 99;
-}
-
-.rst {
-    text-align: center;
-    padding-top: 15px;
-}
 
 .search-box {
     flex-grow: 1;
@@ -77,15 +56,6 @@
     list-style: none;
 }
 
-
-@media only screen and (max-device-width: 959px), only screen and (max-width: 959px) {
-    .app {
-        flex-direction: column;
-    }
-    .list {
-        font-size: 1.5em;
-    }
-}
 
 @media screen and (max-width: 800px) {
     .search-btn {

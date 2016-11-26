@@ -38,7 +38,8 @@ variable.
 | name	|  The name of the location you want to create a marker for. 	|
 | lat  	|  The longitude of the location. 	|
 | long  	|  The longitude of the location. 	|
-| foursquareLink | The location and id used on Foursqure. |
+| foursquareLink | The directry that the FourSquare location after
+                  https://foursquare.com/v/ |
 
 # Breakdown of app.js
 
